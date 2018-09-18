@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Kingdom Hearts III Countdown</string>
+    <string name="title_activity_loading_screen">loadingScreen</string>
 </resources>

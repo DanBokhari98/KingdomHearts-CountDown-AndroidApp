@@ -1,32 +1,71 @@
 package com.example.danish.kingdomheartsiiicountdown;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView txtTimerDay, txtTimerHour, txtTimerMinute, txtTimerSecond;
     private Handler handler;
     private Runnable runnable;
+    int audioLength;
     MediaPlayer mediaPlayer;
     AudioManager audioManager;
+
+    @Override
+    protected void onPause() {
+        setAudioLength();
+        if (this.isFinishing()){ //basically BACK was pressed from this activity
+            mediaPlayer.stop();
+        }
+        Context context = getApplicationContext();
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+        if (!taskInfo.isEmpty()) {
+            ComponentName topActivity = taskInfo.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                mediaPlayer.stop();
+            }
+        }
+        super.onPause();
+    }
+
+    public void setAudioLength(){
+        audioLength = mediaPlayer.getCurrentPosition();
+    }
+
+    @Override
+    protected void onResume() {
+        if(mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+            mediaPlayer.seekTo(audioLength);
+        }
+        super.onResume();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mediaPlayer = MediaPlayer.create(this, R.raw.dearlybeloved);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 50, 0);
         mediaPlayer.start();
         mediaPlayer.setLooping(true);
         txtTimerDay = (TextView) findViewById(R.id.txt_TimerDay);
