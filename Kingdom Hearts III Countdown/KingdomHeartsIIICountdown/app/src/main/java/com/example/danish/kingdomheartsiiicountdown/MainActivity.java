@@ -5,13 +5,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Handler;
-import android.support.constraint.ConstraintLayout;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -59,13 +58,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        TextView colonTime = (TextView)findViewById(R.id.colonTime);
+        colonTime.setText("      :          \t\t:        \t\t\t:");
+
+
         mediaPlayer = MediaPlayer.create(this, R.raw.dearlybeloved);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mediaPlayer.seekTo(26500);
         mediaPlayer.start();
         mediaPlayer.setLooping(true);
         txtTimerDay = (TextView) findViewById(R.id.txt_TimerDay);
