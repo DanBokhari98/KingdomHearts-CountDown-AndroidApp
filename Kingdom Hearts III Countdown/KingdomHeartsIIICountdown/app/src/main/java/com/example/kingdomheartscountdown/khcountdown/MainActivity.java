@@ -1,13 +1,11 @@
-package com.example.danish.kingdomheartsiiicountdown;
+package com.example.kingdomheartscountdown.khcountdown;
 
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,54 +20,35 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtTimerDay, txtTimerHour, txtTimerMinute, txtTimerSecond;
     private Handler handler;
     private Runnable runnable;
-    int audioLength;
     MediaPlayer mediaPlayer;
     AudioManager audioManager;
 
     @Override
-    protected void onPause() {
-        setAudioLength();
-        if (this.isFinishing()){ //basically BACK was pressed from this activity
+    protected void onPause(){
+        if(this.isFinishing()){
             mediaPlayer.stop();
-        }
-        Context context = getApplicationContext();
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-        if (!taskInfo.isEmpty()) {
-            ComponentName topActivity = taskInfo.get(0).topActivity;
-            if (!topActivity.getPackageName().equals(context.getPackageName())) {
-                mediaPlayer.stop();
-            }
         }
         super.onPause();
     }
 
-    public void setAudioLength(){
-        audioLength = mediaPlayer.getCurrentPosition();
-    }
-
     @Override
-    protected void onResume() {
-        if(mediaPlayer != null && !mediaPlayer.isPlaying()) {
+    protected  void onResume(){
+        if(mediaPlayer != null && !mediaPlayer.isPlaying()){
             mediaPlayer.start();
-            mediaPlayer.seekTo(audioLength);
+            mediaPlayer.seekTo(25200);
         }
         super.onResume();
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        countDownStart();
 
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
-        TextView colonTime = (TextView)findViewById(R.id.colonTime);
-        colonTime.setText("      :          \t\t:        \t\t\t:");
-
 
         mediaPlayer = MediaPlayer.create(this, R.raw.dearlybeloved);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -80,10 +59,9 @@ public class MainActivity extends AppCompatActivity {
         txtTimerHour = (TextView) findViewById(R.id.txt_TimerHour);
         txtTimerMinute = (TextView) findViewById(R.id.txt_TimerMinute);
         txtTimerSecond = (TextView) findViewById(R.id.txt_TimerSecond);
-        countDownStart();
     }
 
-    public void countDownStart(){
+    public void countDownStart() {
         handler = new Handler();
         runnable = new Runnable() {
             @Override
@@ -119,14 +97,11 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(runnable, 1000);
     }
 
-    public void textViewGone(){
-        findViewById(R.id.linearLayout1).setVisibility(View.GONE);
-        findViewById(R.id.linearLayout2).setVisibility(View.GONE);
-        findViewById(R.id.linearLayout3).setVisibility(View.GONE);
-        findViewById(R.id.linearLayout3).setVisibility(View.GONE);
-
-
+    public void textViewGone() {
+        findViewById(R.id.DayLayout).setVisibility(View.GONE);
+        findViewById(R.id.HourLayout).setVisibility(View.GONE);
+        findViewById(R.id.MinuteLayout).setVisibility(View.GONE);
+        findViewById(R.id.SecondLayout).setVisibility(View.GONE);
     }
-
-
 }
+

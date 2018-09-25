@@ -1,4 +1,4 @@
-package com.example.danish.kingdomheartsiiicountdown;
+package com.example.kingdomheartscountdown.khcountdown;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.danish.kingdomheartsiiicountdown", appContext.getPackageName());
+        assertEquals("com.example.kingdomheartscountdown.khcountdown", appContext.getPackageName());
     }
 }

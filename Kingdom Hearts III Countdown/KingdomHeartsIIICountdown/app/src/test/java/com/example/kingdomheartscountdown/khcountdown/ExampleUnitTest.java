@@ -1,4 +1,4 @@
-package com.example.danish.kingdomheartsiiicountdown;
+package com.example.kingdomheartscountdown.khcountdown;
 
 import org.junit.Test;
 
